@@ -1,5 +1,4 @@
 .env
-.flaskenv
 NOTAS.txt
 TODO.txt
 palpites/banco.db
