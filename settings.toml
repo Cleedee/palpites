@@ -1,8 +1,9 @@
 [default]
 SESSION_TYPE = 'filesystem'
-SECRET_KEY = "43bu34unbu34"
+SECRET_KEY = "@jinja {{env['SECRET_KEY']}}"
 SQLALCHEMY_DATABASE_URI = "sqlite:///banco.db"
 SQLALCHEMY_TRACK_MODIFICATIONS = 'False'
+APP_NAME = "@jinja {{env['APP_NAME']}}"
 EXTENSIONS = [
     'palpites.ext.database',
     'palpites.ext.cli',

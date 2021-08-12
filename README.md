@@ -12,20 +12,26 @@ SECRET_KEY=<coloque aqui uma senha complexa>
 
 SQLALCHEMY_DATABASE_URI=sqlite:///banco.db
 
+APP_NAME=Palpites
+
 2) Criar um ambiente virtual com o seguinte comando na pasta raiz
 
 $ python -m venv env
 
 $ source env/bin/activate
 
-3) Com o ambiente ativado com o comando anterior, crie as tabelas do banco de dados:
+3) Instalar as dependências
+
+$ pip install -r requirements.txt
+
+4) Com o ambiente ativado com o comando anterior, crie as tabelas do banco de dados:
 
 $ flask init-database
 
-4) Cadastre os jogadores
+5) Cadastre os jogadores
 
 $ flask new-player "Nome do Jogador"
 
-5) Carregue os times pela liga
+6) Carregue os times pela liga
 
 $ flask load-teams serie_a_2021
