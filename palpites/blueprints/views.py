@@ -140,7 +140,9 @@ def init_app(app):
     def nova_rodada():
         rodadas = [int(r.nome) for r in rep.traga_rodadas()]
         rodadas.sort()
-        nova_rodada = rodadas[-1] + 1
+        nova_rodada: int = 1
+        if rodadas:
+            nova_rodada = rodadas[-1] + 1
         rep.salve_rodada(database.Rodada(nome=str(nova_rodada)))
         return redirect(url_for('mostra_rodadas'))
 
