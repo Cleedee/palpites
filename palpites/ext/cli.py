@@ -54,9 +54,11 @@ def init_app(app):
     @app.cli.command('new-player')
     @click.argument('name')
     def novo_jogador(name):
-        db.session.add(Jogador(nome=name))
+        jogador = Jogador(nome=name)
+        db.session.add(jogador)
         db.session.commit()
-        print(f'Jogador {name} criado.')
+        print(f'Jogador {name} criado com id {jogador.id}.')
+        print(f'Coloque a imagem avatar com o nome token_{jogador.id}.png em palpites/static.')
 
     @app.cli.command('events')
     def listar_eventos():
