@@ -5,3 +5,4 @@ flask-sqlalchemy==2.5.1
 WTForms==2.3.3
 Flask-WTF==0.15.1
 alembic==1.6.5
+click==7.1.2
