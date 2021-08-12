@@ -14,7 +14,7 @@ class Time(db.Model):
 class Jogador(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     nome = db.Column('nome', db.String(40))
-    pontos = db.Column(db.Integer)
+    pontos = db.Column(db.Integer, default=0)
 
     @property
     def imagem(self):

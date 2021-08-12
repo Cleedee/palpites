@@ -1,6 +1,6 @@
 import click
 
-from palpites.ext.database import db, Time
+from palpites.ext.database import db, Time, Jogador
 
 eventos = {
     'serie_a_2021': [
@@ -24,7 +24,17 @@ def init_app(app):
     @app.cli.command('load-teams')
     @click.argument('event')
     def carregar_times(event):
-        times = eventos[event]
-        for time in times:
-            db.session.add(Time(nome=time[0], sigla=time[1]))
+        times = eventos.get(event)
+        if times:
+            for time in times:
+                db.session.add(Time(nome=time[0], sigla=time[1]))
+            db.session.commit()
+        else:
+            print('Evento não encontrado.')
+
+    @app.cli.command('new-player')
+    @click.argument('name')
+    def novo_jogador(name):
+        db.session.add(Jogador(nome=name))
         db.session.commit()
+        print('Jogador criado.')
