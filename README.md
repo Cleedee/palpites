@@ -35,3 +35,5 @@ $ flask new-player "Nome do Jogador"
 6) Carregue os times pela liga
 
 $ flask load-teams serie_a_2021
+
+Para criar os tokens dos jogadores, use a ferramenta online Token Stamp: http://rolladvantage.com/tokenstamp/
