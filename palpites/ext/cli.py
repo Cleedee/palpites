@@ -37,4 +37,4 @@ def init_app(app):
     def novo_jogador(name):
         db.session.add(Jogador(nome=name))
         db.session.commit()
-        print('Jogador criado.')
+        print(f'Jogador {name} criado.')
