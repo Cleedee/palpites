@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Partidas da Rodada {{ rodada.nome }}</h1>
+
+{% if partidas|length < 10 %}
+<a href="{{ url_for('nova_partida', rodada_id=rodada.id) }}">Nova Partida</a>
+{% endif %}
+
+<table class="table table-striped">
+    {% for partida in partidas %}
+    <tr>
+        <td class="{{'resultado' if partida.resultado == 'M' else ''}}">
+            <img src="{{ url_for('static', filename=partida.mandante.imagem  ) }}" alt="">
+        </td>
+        <td class="{{'resultado' if partida.resultado == 'E' else ''}}"> X </td>
+        <td class="{{'resultado' if partida.resultado == 'V' else ''}}">
+            <img src="{{ url_for('static', filename=partida.visitante.imagem  ) }}" alt="">
+        </td>
+        <td>
+            <a href="{{ url_for('editar_partida', partida_id=partida.id) }}">Editar</a>
+        </td>
+        <td><a href="{{ url_for('palpites',partida_id=partida.id) }}">Palpites</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

@@ -1,0 +1,9 @@
+[default]
+SESSION_TYPE = 'filesystem'
+SECRET_KEY = "43bu34unbu34"
+SQLALCHEMY_DATABASE_URI = "sqlite:///banco.db"
+SQLALCHEMY_TRACK_MODIFICATIONS = 'False'
+EXTENSIONS = [
+    'palpites.ext.database',
+    'palpites.blueprints.views'
+]

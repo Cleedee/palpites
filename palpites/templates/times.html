@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+Total de times: {{ times | length }}
+<table class="table table-striped"> 
+    <thead>
+        <tr>
+            <th>Time</th>
+            <th>Palpites Errados</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for time, erros in info %}
+        <tr>
+            <td>{{ time.nome }}</td>
+            <td>{{ erros }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

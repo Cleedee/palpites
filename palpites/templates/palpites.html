@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<ul class="nav nav-pills">
+  <li class="nav-item">
+    <a class="nav-link active" href="{{ url_for('mostra_partidas',rodada_id = partida.rodada_id) }}">Rodada {{ partida.rodada.nome }}</a>
+  </li>
+</ul>
+<h1>Palpites para</h1>
+<table class="table table-striped">
+    <tr>
+        <td class="{{'resultado' if partida.resultado == 'M' else ''}}">
+            <img src="{{ url_for('static', filename=partida.mandante.imagem  ) }}" alt="">
+        </td>
+        <td class="{{'resultado' if partida.resultado == 'E' else ''}}"> X </td>
+        <td class="{{'resultado' if partida.resultado == 'V' else ''}}">
+            <img src="{{ url_for('static', filename=partida.visitante.imagem  ) }}" alt="">
+        </td>
+    </tr>
+</table>
+{% if not palpites %}
+    <a href="{{ url_for('gerar_palpites',partida_id=partida.id) }}">Gerar Palpites</a>
+{% endif %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Jogador</th>
+            <th>Palpite</th>
+            <th>Edição</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for palpite in palpites %}
+        <tr>
+            <td>
+                <img src="{{ url_for('static', filename=palpite.apostador.imagem  ) }}" alt=""
+                    style="width:auto; height:50px">
+            </td>
+            <td>
+                <img src="{{ url_for('static', filename=palpite.imagem  ) }}" alt="">
+            </td>
+            <td> <a href="{{ url_for('palpite',palpite_id=palpite.id) }}">Editar</a> </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

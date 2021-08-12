@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th colspan="4">Rodadas</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for rodada in rodadas %}
+        <tr>
+            <td>{{ rodada.nome }}</td>
+            <td><a href="{{ url_for('mostra_partidas',rodada_id = rodada.id) }}">Ver Partidas</a></td>
+            <td><a href="{{ url_for('parciais', rodada_id=rodada.id) }}">Pontuação da Rodada</a></td>
+            <td><a href="{{ url_for('consolidar', rodada_id=rodada.id) }}">Consolidar</a></td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td><a href="{{ url_for('nova_rodada') }}">Nova Rodada</a></td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}
