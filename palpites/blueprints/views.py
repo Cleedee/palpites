@@ -86,11 +86,17 @@ def init_app(app):
     def palpites(partida_id):
         partida = rep.traga_partida(partida_id)
         lista = rep.traga_palpites_na_partida(partida_id)
+        print(len(lista))
+        if len(lista) == 0:
+            print('Gerar palpites')
+            redirect(url_for('gerar_palpites',partida_id=partida_id))
         return render_template('palpites.html', partida=partida,palpites=lista)
 
     @app.get('/gerar_palpites/<partida_id>')
     def gerar_palpites(partida_id):
+        print('Gerando palpites')
         rep.gerar_palpites(partida_id)
+        print('Palpites gerados')
         return redirect(url_for('palpites',partida_id=partida_id))
 
     @app.get('/palpite/<palpite_id>')

@@ -20,6 +20,10 @@ def traga_rodadas():
 def traga_partidas_da_rodada(rodada_id):
     return Partida.query.filter(Partida.rodada_id == rodada_id).all()
 
+def traga_ultimas_5_partidas_do(time: Time) -> List[Partida]:
+    # TODO
+    ...
+
 def traga_rodada(rodada_id):
     return Rodada.query.get(rodada_id)
 
