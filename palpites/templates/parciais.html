@@ -1,32 +1,36 @@
 {% extends 'base.html' %}
 {% block content %}
-<ul class="nav nav-pills">
-  <li class="nav-item">
-    <a class="nav-link active" href="{{ url_for('mostra_partidas',rodada_id = rodada.id) }}">Rodada {{ rodada.nome }}</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Parciais da Rodada</a>
-  </li>
-</ul>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Jogador</th>
-            <th>Pontos</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for parcial in parciais %}
-        <tr>
-            <td>
-                <a href="{{ url_for('palpites_jogador',rodada_id=rodada.id, jogador_id=parcial.jogador.id)}}">
-                    <img src="{{ url_for('static', filename=parcial.jogador.imagem  ) }}" alt=""
-                        style="width:auto; height:50px">
-                </a>
-            </td>
-            <td>{{ parcial.pontos }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+
+<div class="container">
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+          <a class="nav-link active" href="{{ url_for('mostra_partidas',rodada_id = rodada.id) }}">Rodada {{ rodada.nome }}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Parciais da Rodada</a>
+        </li>
+      </ul>
+      <table class="table table-striped">
+          <thead>
+              <tr>
+                  <th>Jogador</th>
+                  <th>Pontos</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for parcial in parciais %}
+              <tr>
+                  <td>
+                      <a href="{{ url_for('palpites_jogador',rodada_id=rodada.id, jogador_id=parcial.jogador.id)}}">
+                          <img src="{{ url_for('static', filename=parcial.jogador.imagem  ) }}" alt=""
+                              style="width:auto; height:50px">
+                      </a>
+                  </td>
+                  <td>{{ parcial.pontos }}</td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+</div>
+
 {% endblock %}

@@ -1,33 +1,36 @@
 {% extends 'base.html' %}
 {% block content %}
-<ul class="nav nav-pills">
-  <li class="nav-item">
-    <a class="nav-link" href="{{ url_for('mostra_partidas',rodada_id = rodada.id) }}">Rodada {{ rodada.nome }}</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{{ url_for('parciais',rodada_id = rodada.id) }}">Parciais</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Palpites de {{ jogador.nome }}</a>
-  </li>
-</ul>
-<table class="table table-striped">
-  {% for palpite in palpites %}
-  <tr>
-    <td class="{{'resultado' if palpite.partida.resultado == 'M' else ''}}">
-      <img src="{{ url_for('static', filename=palpite.partida.mandante.imagem  ) }}" alt="">
-    </td>
-    <td class="{{'resultado' if palpite.partida.resultado == 'E' else ''}}">
-      versus
-    </td>
-    <td class="{{'resultado' if palpite.partida.resultado == 'V' else ''}}">
-      <img src="{{ url_for('static', filename=palpite.partida.visitante.imagem  ) }}" alt="">
-    </td>
-    <td>
-      <img src="{{ url_for('static', filename=palpite.imagem  ) }}" alt="">
-    </td>
-  </tr>
-  {% endfor %}
-</table>
+
+<div class="container">
+  <ul class="nav nav-pills">
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url_for('mostra_partidas',rodada_id = rodada.id) }}">Rodada {{ rodada.nome }}</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url_for('parciais',rodada_id = rodada.id) }}">Parciais</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Palpites de {{ jogador.nome }}</a>
+    </li>
+  </ul>
+  <table class="table table-striped">
+    {% for palpite in palpites %}
+    <tr>
+      <td class="{{'resultado' if palpite.partida.resultado == 'M' else ''}}">
+        <img src="{{ url_for('static', filename=palpite.partida.mandante.imagem  ) }}" alt="">
+      </td>
+      <td class="{{'resultado' if palpite.partida.resultado == 'E' else ''}}">
+        versus
+      </td>
+      <td class="{{'resultado' if palpite.partida.resultado == 'V' else ''}}">
+        <img src="{{ url_for('static', filename=palpite.partida.visitante.imagem  ) }}" alt="">
+      </td>
+      <td>
+        <img src="{{ url_for('static', filename=palpite.imagem  ) }}" alt="">
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
 
 {% endblock %}

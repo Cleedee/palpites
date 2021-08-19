@@ -1,21 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Partida</h1>
-<form action="{{ url_for('salvar_partida') }}" method="POST">
-    {{ form.hidden_tag() }}
-    <div class="mb-3">
-        {{ form.mandante.label(class="form-label",for='mandante') }}
-        {{ form.mandante(class="form-select") }}
-    </div>
-    <div class="mb-3">
-        {{ form.visitante.label(class="form-label",for='visitante') }}
-        {{ form.visitante(class="form-select") }}
-    </div>
-    <div class="mb-3">
-        {{ form.resultado.label(class="form-label",for='resultado') }}
-        {{ form.resultado(class="form-select") }}
-    </div>
-    {{ form.submit_continuar(class='btn btn-primary') }}
-    {{ form.submit_salvar(class='btn btn-primary') }}
-</form>
+
+<div class="container">
+    <h1>Partida</h1>
+    <form action="{{ url_for('salvar_partida') }}" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.mandante.label(class="form-label",for='mandante') }}
+            {{ form.mandante(class="form-select") }}
+        </div>
+        <div class="mb-3">
+            {{ form.visitante.label(class="form-label",for='visitante') }}
+            {{ form.visitante(class="form-select") }}
+        </div>
+        <div class="mb-3">
+            {{ form.resultado.label(class="form-label",for='resultado') }}
+            {{ form.resultado(class="form-select") }}
+        </div>
+        {{ form.submit_continuar(class='btn btn-primary') }}
+        {{ form.submit_salvar(class='btn btn-primary') }}
+    </form>
+</div>
+
 {% endblock %}

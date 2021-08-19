@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
-<table>
-    {% for stat in totais %}
-    <tr>
-        <td>{{ stat.time.nome }}</td>
-        <td>{{ stat.pontos }}</td>
-    </tr>
-    {% endfor %}
-</table>
+<div class="container">
+    <table>
+        {% for stat in totais %}
+        <tr>
+            <td>{{ stat.time.nome }}</td>
+            <td>{{ stat.pontos }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
 {% endblock %}
