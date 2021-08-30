@@ -15,7 +15,7 @@ def traga_jogador(id):
     return Jogador.query.get(id)
 
 def traga_rodadas():
-    return Rodada.query.all()
+    return Rodada.query.order_by(Rodada.id.desc()).all()
 
 def traga_partidas_da_rodada(rodada_id):
     return Partida.query.filter(Partida.rodada_id == rodada_id).all()
