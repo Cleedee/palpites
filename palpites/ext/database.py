@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
@@ -10,6 +11,32 @@ class Time(db.Model):
     @property
     def imagem(self):
         return f'{self.sigla}.png'
+
+class Usuario(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    id_alternativo = db.Column(db.Unicode)
+    apelido = db.Column(db.String(60))
+    nome = db.Column(db.String(60))
+    senha = db.Column(db.String(60))
+    ativo = db.Column(db.Boolean)
+
+    @property
+    def is_anonymous(self):
+        return False
+
+    @property
+    def get_id(self):
+        return self.id_alternativo
+
+    @property
+    def is_active(self):
+        return self.ativo
+
+    def set_senha(self, senha):
+        self.senha = generate_password_hash(senha, method = 'sha256')
+
+    def checar_senha(self, senha):
+        return check_password_hash(self.senha, senha)
 
 class Jogador(db.Model):
     id = db.Column(db.Integer, primary_key = True)

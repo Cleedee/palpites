@@ -8,5 +8,6 @@ VERSION = '0.1.0'
 EXTENSIONS = [
     'palpites.ext.database',
     'palpites.ext.cli',
+    'palpites.ext.authorization',
     'palpites.blueprints.views'
 ]

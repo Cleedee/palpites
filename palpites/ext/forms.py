@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import Form, BooleanField, StringField, HiddenField,  SelectField, validators
-from wtforms import SubmitField
+from wtforms import SubmitField, PasswordField
 from wtforms.validators import (DataRequired, Length, Optional,Email, ValidationError,
     InputRequired)
 
@@ -24,6 +24,10 @@ class PalpiteForm(FlaskForm):
     submit_salvar = SubmitField('Salvar e Sair')
     submit_seguir = SubmitField('Salvar e Seguir')
 
+class LoginForm(FlaskForm):
+    apelido = StringField(validators=[DataRequired()])
+    senha = PasswordField(validators=[DataRequired()])
+    submit = SubmitField('Entrar')
 
 def carregar_selecoes_partida(form, repository):
     times = repository.traga_times_tuplados()
