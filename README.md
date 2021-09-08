@@ -4,7 +4,7 @@ Após você baixar o código via git clone, será necessário realizar algumas a
 
 1) Criar um arquivo .env na pasta raiz para adicionar a seguintes variável
 
-SECRET_KEY=<coloque aqui uma senha complexa>
+SECRET_KEY=coloque aqui uma senha complexa
 
 
 2) Criar um ambiente virtual com o seguinte comando na pasta raiz
