@@ -1,6 +1,6 @@
 import click
 
-from palpites.ext.database import db, Time, Jogador
+from palpites.ext.database import db, Time, Jogador, Usuario
 
 EVENT0S = {
     'serie_a_2021': [
@@ -64,3 +64,13 @@ def init_app(app):
     def listar_eventos():
         for descricao in DESCRICOES:
             print('{} - {}'.format(descricao[0], descricao[1]))
+
+    @app.cli.command('new-user')
+    @click.argument('apelido')
+    @click.argument('senha')
+    def novo_usuario(apelido, senha):
+        usuario = Usuario(apelido = apelido)
+        usuario.set_senha(senha)
+        db.session.add(usuario)
+        db.session.commit()
+        print('Usuario criado.')

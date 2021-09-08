@@ -7,7 +7,9 @@ APP_NAME = "@jinja {{env['APP_NAME'] or 'Palpites'}}"
 VERSION = '0.1.0'
 EXTENSIONS = [
     'palpites.ext.database',
+    'palpites.ext.auth',
     'palpites.ext.cli',
     'palpites.ext.authorization',
-    'palpites.blueprints.views'
+    'palpites.blueprints.views',
+    'palpites.blueprints.auth'
 ]

@@ -1,6 +1,8 @@
 from collections import namedtuple
 
 from flask import render_template, request, redirect, url_for
+from flask_login import login_required
+
 import palpites.ext.repository as rep
 import palpites.ext.forms as forms
 from palpites.ext import database
@@ -12,22 +14,26 @@ def init_app(app):
         return render_template('index.html')
 
     @app.get('/jogadores')
+    @login_required
     def jogadores():
         lista = rep.traga_jogadores()
         return render_template('jogadores.html', jogadores=lista)
 
     @app.get('/rodadas')
+    @login_required
     def mostra_rodadas():
         rodadas = rep.traga_rodadas()
         return render_template('rodadas.html', rodadas = rodadas)
 
     @app.get('/partidas/<int:rodada_id>')
+    @login_required
     def mostra_partidas(rodada_id):
         rodada = rep.traga_rodada(rodada_id)
         partidas = rep.traga_partidas_da_rodada(rodada_id)
         return render_template('partidas.html', rodada=rodada, partidas=partidas)
 
     @app.get('/nova_partida/<int:rodada_id>')
+    @login_required
     def nova_partida(rodada_id):
         form = forms.PartidaForm()
         form.rodada_id.data = rodada_id
@@ -35,6 +41,7 @@ def init_app(app):
         return render_template('partida.html', form=form)
 
     @app.get('/editar_partida/<int:partida_id>')
+    @login_required
     def editar_partida(partida_id):
         partida = rep.traga_partida(partida_id)
         form = forms.PartidaForm()
@@ -43,6 +50,7 @@ def init_app(app):
         return render_template('partida.html', form=form)
 
     @app.post('/salvar_partida')
+    @login_required
     def salvar_partida():
         form = forms.PartidaForm()
         form = forms.carregar_selecoes_partida(form, rep)
@@ -62,6 +70,7 @@ def init_app(app):
         return redirect(url_for('index'))
 
     @app.post('/salvar_palpite')
+    @login_required
     def salvar_palpite():
         form = forms.PalpiteForm()
         if form.validate_on_submit():
@@ -83,6 +92,7 @@ def init_app(app):
         return redirect(url_for('palpites',partida_id=palpite.partida_id))
 
     @app.get('/palpites/<partida_id>')
+    @login_required
     def palpites(partida_id):
         partida = rep.traga_partida(partida_id)
         lista = rep.traga_palpites_na_partida(partida_id)
@@ -93,6 +103,7 @@ def init_app(app):
         return render_template('palpites.html', partida=partida,palpites=lista)
 
     @app.get('/gerar_palpites/<partida_id>')
+    @login_required
     def gerar_palpites(partida_id):
         print('Gerando palpites')
         rep.gerar_palpites(partida_id)
@@ -100,6 +111,7 @@ def init_app(app):
         return redirect(url_for('palpites',partida_id=partida_id))
 
     @app.get('/palpite/<palpite_id>')
+    @login_required
     def palpite(palpite_id):
         p = rep.traga_palpite(palpite_id)
         form = forms.PalpiteForm()
@@ -108,11 +120,13 @@ def init_app(app):
         return render_template('palpite.html', form=form, palpite=p)
 
     @app.get('/consolidar/<rodada_id>')
+    @login_required
     def consolidar(rodada_id):
         rep.consolidar_rodada(rodada_id)
         return redirect(url_for('jogadores'))
 
     @app.get('/parciais/<rodada_id>')
+    @login_required
     def parciais(rodada_id):
         rodada = rep.traga_rodada(rodada_id)
         parciais = rep.traga_parcial(rodada_id)
@@ -120,6 +134,7 @@ def init_app(app):
         return render_template('parciais.html', rodada=rodada, parciais=parciais,jogadores=jogadores)
 
     @app.get('/palpites_jogador/<rodada_id>/<jogador_id>')
+    @login_required
     def palpites_jogador(rodada_id, jogador_id):
         rodada = rep.traga_rodada(rodada_id)
         palpites = rep.traga_palpites_da_rodada_do_jogador(rodada_id, jogador_id)
@@ -129,6 +144,7 @@ def init_app(app):
 
     @app.get('/time')
     @app.get('/time/<jogador_id>')
+    @login_required
     def palpites_errados_time(jogador_id = None):
         times = rep.traga_times()
         Estatistica = namedtuple('Estatistica',['time','pontos'])
@@ -143,6 +159,7 @@ def init_app(app):
         return render_template('time.html', totais=totais)
 
     @app.get('/nova_rodada')
+    @login_required
     def nova_rodada():
         rodadas = [int(r.nome) for r in rep.traga_rodadas()]
         rodadas.sort()
@@ -153,6 +170,7 @@ def init_app(app):
         return redirect(url_for('mostra_rodadas'))
 
     @app.get('/times')
+    @login_required
     def mostra_times():
         times = rep.traga_times()
         info = [ (time, rep.total_palpites_errados_por_time(time.id)) for time in times ]

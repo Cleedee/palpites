@@ -18,15 +18,18 @@ class Usuario(db.Model):
     apelido = db.Column(db.String(60))
     nome = db.Column(db.String(60))
     senha = db.Column(db.String(60))
-    ativo = db.Column(db.Boolean)
+    ativo = db.Column(db.Boolean, default = True)
 
     @property
     def is_anonymous(self):
         return False
 
     @property
+    def is_authenticated(self):
+        return True
+
     def get_id(self):
-        return self.id_alternativo
+        return self.apelido
 
     @property
     def is_active(self):

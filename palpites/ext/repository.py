@@ -3,6 +3,7 @@ from typing import List
 from sqlalchemy import or_, and_
 
 from palpites.ext.database import Time, Jogador, Rodada, Partida, Palpite, db
+from palpites.ext.database import Usuario
 from palpites.ext import utils
 
 def traga_times():
@@ -132,6 +133,9 @@ def total_palpites_errados_por_time(time_id: int, jogador_id: int = None) -> int
             ),
             Palpite.apostador_id == jogador_id
         ).count()    
+
+def traga_usuario_por_apelido(apelido: str) -> Usuario:
+    return Usuario.query.filter(Usuario.apelido == apelido).one_or_none()
 
 def salve_rodada(rodada: Rodada):
     db.session.add(rodada)
