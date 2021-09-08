@@ -2,17 +2,10 @@
 
 Após você baixar o código via git clone, será necessário realizar algumas ações:
 
-1) Criar um arquivo .env na pasta raiz para adicionar as seguintes variáveis
-
-FLASK_APP=palpites
-
-FLASK_ENV=development
+1) Criar um arquivo .env na pasta raiz para adicionar a seguintes variável
 
 SECRET_KEY=<coloque aqui uma senha complexa>
 
-SQLALCHEMY_DATABASE_URI=sqlite:///banco.db
-
-APP_NAME=Palpites
 
 2) Criar um ambiente virtual com o seguinte comando na pasta raiz
 
