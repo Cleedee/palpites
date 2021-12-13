@@ -4,12 +4,12 @@ SECRET_KEY = "@jinja {{env['SECRET_KEY'] or 'segredo'}}"
 SQLALCHEMY_DATABASE_URI = "sqlite:///banco.db"
 SQLALCHEMY_TRACK_MODIFICATIONS = 'False'
 APP_NAME = "@jinja {{env['APP_NAME'] or 'Palpites'}}"
+RBAC_USE_WHITE = 'True'
 VERSION = '0.1.0'
 EXTENSIONS = [
     'palpites.ext.database',
     'palpites.ext.auth',
     'palpites.ext.cli',
-    'palpites.ext.authorization',
     'palpites.blueprints.views',
     'palpites.blueprints.auth'
 ]

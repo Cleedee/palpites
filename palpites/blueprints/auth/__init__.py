@@ -28,6 +28,6 @@ def init_app(app):
     @login_required
     def logout():
         logout_user()
-        return redirect(url_for('index'))
+        return redirect(url_for('auth.login'))
 
     app.register_blueprint(bp)

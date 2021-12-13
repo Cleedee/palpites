@@ -1,5 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_rbac import UserMixin
+#from palpites.ext.authorization import player, admin, rbac
 
 db = SQLAlchemy()
 
@@ -12,6 +14,7 @@ class Time(db.Model):
     def imagem(self):
         return f'{self.sigla}.png'
 
+#@rbac.as_user_model
 class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     id_alternativo = db.Column(db.Unicode)
@@ -19,6 +22,7 @@ class Usuario(db.Model):
     nome = db.Column(db.String(60))
     senha = db.Column(db.String(60))
     ativo = db.Column(db.Boolean, default = True)
+    papeis = db.Column(db.String(10), default = 'P')
 
     @property
     def is_anonymous(self):
@@ -40,6 +44,14 @@ class Usuario(db.Model):
 
     def checar_senha(self, senha):
         return check_password_hash(self.senha, senha)
+
+    # def get_roles(self):
+    #     roles = []
+    #     if 'P' in self.papeis:
+    #         roles.append(player)
+    #     if 'A' in self.papeis:
+    #         roles.append(admin)
+    #     return roles
 
 class Jogador(db.Model):
     id = db.Column(db.Integer, primary_key = True)

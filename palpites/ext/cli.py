@@ -3,13 +3,35 @@ import click
 from palpites.ext.database import db, Time, Jogador, Usuario
 
 EVENT0S = {
+    'serie_a_2022': [
+        ('América-MG', 'america'), ('Athletico-PR',
+                                    'athletico'), ('Atlético-GO', 'cag'),
+        ('Atlético-MG', 'atletico_mg'), ('Avaí', 'avai'),
+        ('Botafogo', 'botafogo'),
+        ('Bragantino', 'bragantino'),
+        ('Ceará', 'ceara'), ('Corinthians', 'corinthians'),
+        ('Coritiba', 'coritiba'),
+        ('Cuiabá', 'cuiaba'), ('Flamengo', 'flamengo'),
+        ('Fluminense', 'fluminense'),
+        ('Fortaleza', 'fortaleza'), ('Goiás',
+                                     'goias'), ('Internacional', 'inter'),
+        ('Juventude', 'juventude'), ('Palmeiras',
+                                     'palmeiras'), ('Santos', 'santos'),
+        ('São Paulo', 'spfc')
+    ],
     'serie_a_2021': [
-        ('América-MG','america'), ('Athletico-PR','athletico'), ('Atlético-GO','cag'),
-        ('Atlético-MG','atletico_mg'), ('Bahia', 'bahia'), ('Bragantino', 'bragantino'),
-        ('Ceará', 'ceara'), ('Chapecoense', 'chapecoense'), ('Corinthians','corinthians'),
-        ('Cuiabá', 'cuiaba'), ('Flamengo', 'flamengo'), ('Fluminense', 'fluminense'),
-        ('Fortaleza', 'fortaleza'), ('Grêmio', 'gremio'), ('Internacional', 'inter'),
-        ('Juventude', 'juventude'), ('Palmeiras', 'palmeiras'), ('Santos', 'santos'),
+        ('América-MG', 'america'), ('Athletico-PR',
+                                    'athletico'), ('Atlético-GO', 'cag'),
+        ('Atlético-MG', 'atletico_mg'), ('Bahia',
+                                         'bahia'), ('Bragantino', 'bragantino'),
+        ('Ceará', 'ceara'), ('Chapecoense',
+                             'chapecoense'), ('Corinthians', 'corinthians'),
+        ('Cuiabá', 'cuiaba'), ('Flamengo', 'flamengo'),
+        ('Fluminense', 'fluminense'),
+        ('Fortaleza', 'fortaleza'), ('Grêmio',
+                                     'gremio'), ('Internacional', 'inter'),
+        ('Juventude', 'juventude'), ('Palmeiras',
+                                     'palmeiras'), ('Santos', 'santos'),
         ('São Paulo', 'spfc'), ('Sport Recife', 'sport')
     ],
     'premier2021': [
@@ -28,6 +50,7 @@ EVENT0S = {
 
 DESCRICOES = [
     ('serie_a_2021', 'Clubes da Série A do Campeonato Brasileiro 2021'),
+    ('serie_a_2022', 'Clubes da Série A do Campeonato Brasileiro 2022'),
     ('premier2021', 'Clubes da Premier League 2021-2022')
 ]
 
@@ -58,7 +81,8 @@ def init_app(app):
         db.session.add(jogador)
         db.session.commit()
         print(f'Jogador {name} criado com id {jogador.id}.')
-        print(f'Coloque a imagem avatar com o nome token_{jogador.id}.png em palpites/static.')
+        print(
+            f'Coloque a imagem avatar com o nome token_{jogador.id}.png em palpites/static.')
 
     @app.cli.command('events')
     def listar_eventos():
@@ -69,7 +93,7 @@ def init_app(app):
     @click.argument('apelido')
     @click.argument('senha')
     def novo_usuario(apelido, senha):
-        usuario = Usuario(apelido = apelido)
+        usuario = Usuario(apelido=apelido)
         usuario.set_senha(senha)
         db.session.add(usuario)
         db.session.commit()
