@@ -11,5 +11,6 @@ EXTENSIONS = [
     'palpites.ext.auth',
     'palpites.ext.cli',
     'palpites.blueprints.views',
+    'palpites.blueprints.grupo',
     'palpites.blueprints.auth'
 ]

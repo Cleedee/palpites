@@ -60,7 +60,7 @@ class Jogador(db.Model):
 
     @property
     def imagem(self):
-        return f'token_{self.id}.png'    
+        return f'token_{self.id}.png'
 
 class Rodada(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -99,6 +99,13 @@ class Palpite(db.Model):
             return self.partida.visitante.imagem
         else:
             return 'e.png'
+
+class Grupo(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    nome = db.Column(db.String(60))
+    dono_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
+    dono = db.relationship('Usuario', foreign_keys=[dono_id])
+    ativo = db.Column(db.Boolean, default=True)
 
 def init_app(app):
     db.init_app(app)
