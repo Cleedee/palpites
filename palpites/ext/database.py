@@ -105,6 +105,7 @@ class Grupo(db.Model):
     nome = db.Column(db.String(60))
     dono_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
     dono = db.relationship('Usuario', foreign_keys=[dono_id])
+    data_cadastro = db.Column(db.DateTime)
     ativo = db.Column(db.Boolean, default=True)
 
 def init_app(app):

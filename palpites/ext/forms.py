@@ -4,7 +4,7 @@ from wtforms import SubmitField, PasswordField
 from wtforms.validators import (DataRequired, Length, Optional,Email, ValidationError,
     InputRequired)
 
-from palpites.ext.database import Partida, Palpite
+from palpites.ext.database import Partida, Palpite, Grupo
 
 class PartidaForm(FlaskForm):
     partida_id = HiddenField()
@@ -28,6 +28,17 @@ class LoginForm(FlaskForm):
     apelido = StringField(validators=[DataRequired()])
     senha = PasswordField(validators=[DataRequired()])
     submit = SubmitField('Entrar')
+
+class GrupoForm(FlaskForm):
+    id = HiddenField()
+    nome = StringField(validators=[DataRequired()], render_kw={'autofocus': True})
+    dono = StringField()
+    submit = SubmitField('Salvar')
+
+def carregar_grupo(form: GrupoForm, grupo: Grupo, repository):
+    form.id.data = grupo.id
+    form.nome.data = grupo.nome
+    forn.dono.data = grupo.dono.nome
 
 def carregar_selecoes_partida(form, repository):
     times = repository.traga_times_tuplados()

@@ -1,7 +1,10 @@
 {% extends 'grupo/base.html' %}
 {% block content %}
 <div class="container">
-    <button type="button" class="btn btn-primary">Novo Grupo</button>
+    <a class="btn btn-primary" href="{{ url_for('grupo.novo_grupo') }}"
+        role="button">
+        Novo Grupo
+    </a>
     <h3>Meus Grupos</h3>
     <ul>
         <li>Grupo dos Amigos do Trabalho</li>
