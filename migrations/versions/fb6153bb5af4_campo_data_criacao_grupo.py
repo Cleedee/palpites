@@ -15,10 +15,9 @@ down_revision = 'a39538758585'
 branch_labels = None
 depends_on = None
 
-
 def upgrade():
-    pass
+    op.add_column('grupo', sa.Column('data_cadastro', sa.DateTime))
 
 
 def downgrade():
-    pass
+    op.drop_column('grupo', 'data_cadastro')
