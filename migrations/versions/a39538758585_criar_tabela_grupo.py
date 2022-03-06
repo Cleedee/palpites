@@ -21,7 +21,7 @@ def upgrade():
         'grupo',
         sa.Column('id', sa.Integer, primary_key = True),
         sa.Column('nome', sa.String(60)),
-        sa.Column('dono', sa.Integer),
+        sa.Column('dono_id', sa.Integer),
         sa.Column('ativo', sa.Boolean)
     )
 

@@ -7,8 +7,9 @@
     </a>
     <h3>Meus Grupos</h3>
     <ul>
-        <li>Grupo dos Amigos do Trabalho</li>
-        <li>Família Macêdo</li>
+        {% for grupo in grupos %}
+        <li>{{ grupo.nome }}</li>
+        {% endfor %}
     </ul>
 </div>
 {% endblock %}

@@ -3,7 +3,7 @@ from typing import List
 from sqlalchemy import or_, and_
 
 from palpites.ext.database import Time, Jogador, Rodada, Partida, Palpite, db
-from palpites.ext.database import Usuario
+from palpites.ext.database import Usuario, Grupo
 from palpites.ext import utils
 
 def traga_times():
@@ -56,6 +56,13 @@ def traga_palpites_na_partida(partida_id):
 
 def traga_palpites_da_rodada(rodada_id) -> List[Palpite]:
     return Palpite.query.join(Partida).filter(Partida.rodada_id == rodada_id).all()
+
+def traga_grupos_por_dono(dono_id):
+    return Grupo.query.filter(Grupo.dono_id == dono_id).all()
+
+def salve_grupo(grupo):
+    db.session.add(grupo)
+    db.session.commit()
 
 def salve_partida(partida):
     db.session.add(partida)
@@ -132,7 +139,7 @@ def total_palpites_errados_por_time(time_id: int, jogador_id: int = None) -> int
                 )
             ),
             Palpite.apostador_id == jogador_id
-        ).count()    
+        ).count()
 
 def traga_usuario_por_apelido(apelido: str) -> Usuario:
     return Usuario.query.filter(Usuario.apelido == apelido).one_or_none()

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_rbac import UserMixin
@@ -57,6 +59,10 @@ class Jogador(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     nome = db.Column('nome', db.String(40))
     pontos = db.Column(db.Integer, default=0)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
+    usuario = db.relationship('Usuario', foreign_keys=[usuario_id])
+    grupo_id = db.Column(db.Integer, db.ForeignKey('grupo.id'))
+    grupo = db.relationship('Grupo', foreign_keys=[grupo_id])
 
     @property
     def imagem(self):
@@ -105,7 +111,7 @@ class Grupo(db.Model):
     nome = db.Column(db.String(60))
     dono_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
     dono = db.relationship('Usuario', foreign_keys=[dono_id])
-    data_cadastro = db.Column(db.DateTime)
+    data_cadastro = db.Column(db.DateTime, default=datetime.utcnow)
     ativo = db.Column(db.Boolean, default=True)
 
 def init_app(app):

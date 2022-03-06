@@ -1,7 +1,7 @@
 {% extends 'grupo/base.html' %}
 {% block content %}
 <div class="container">
-    <form class="" action="index.html" method="post">
+    <form class="" action="{{ url_for('grupo.salvar_grupo') }}" method="post">
         {{ form.hidden_tag() }}
         <div class="mb-3">
             {{ form.nome.label(class="form-label",for='nome') }}
@@ -11,7 +11,7 @@
             {{ form.dono.label(class="form-label",for='dono') }}
             {{ form.dono(class="form-control") }}
         </div>
-        {{ form.submit(class='btn btn-primary') }}        
+        {{ form.submit(class='btn btn-primary') }}
     </form>
 </div>
 {% endblock %}
