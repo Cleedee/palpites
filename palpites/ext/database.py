@@ -106,13 +106,22 @@ class Palpite(db.Model):
         else:
             return 'e.png'
 
+class Torneio(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    nome = db.Column(db.String(60))
+    responsavel_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
+    responsavel = db.relationship('Usuario', foreign_keys=[responsavel_id])
+
 class Grupo(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     nome = db.Column(db.String(60))
     dono_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
     dono = db.relationship('Usuario', foreign_keys=[dono_id])
+    torneio_id = db.Column(db.Integer, db.ForeignKey('torneio.id'))
+    torneio = db.relationship('Torneio', foreign_keys=[torneio_id])    
     data_cadastro = db.Column(db.DateTime, default=datetime.utcnow)
     ativo = db.Column(db.Boolean, default=True)
+
 
 def init_app(app):
     db.init_app(app)
