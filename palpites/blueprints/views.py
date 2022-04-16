@@ -1,17 +1,24 @@
 from collections import namedtuple
 
-from flask import render_template, request, redirect, url_for
-from flask_login import login_required
+from flask import render_template, request, redirect, url_for, session
+from flask import abort
+from flask_login import login_required, current_user
 
 import palpites.ext.repository as rep
+from palpites.ext import fachada
 import palpites.ext.forms as forms
 from palpites.ext import database
 
 def init_app(app):
 
     @app.get('/')
+    @login_required
     def index():
-        return render_template('index.html')
+        meus_grupos = rep.traga_grupos_por_usuario(current_user.id)
+        grupos = rep.traga_grupos_por_dono(current_user.id)
+        torneios = rep.traga_torneios_por_responsavel(current_user.id)
+        return render_template('index.html', grupos=grupos, torneios=torneios,
+            meus_grupos=meus_grupos)
 
     @app.get('/jogadores')
     @login_required
@@ -19,10 +26,15 @@ def init_app(app):
         lista = rep.traga_jogadores()
         return render_template('jogadores.html', jogadores=lista)
 
-    @app.get('/rodadas')
+    @app.get('/rodadas/<int:grupo_id>')
     @login_required
-    def mostra_rodadas():
-        rodadas = rep.traga_rodadas()
+    def mostra_rodadas(grupo_id):
+        grupo = rep.traga_grupo(grupo_id)
+        if grupo:
+            session['GRUPO'] = grupo.id
+        else:
+            abort(404)
+        rodadas = rep.traga_rodadas_por_torneio(grupo.torneio_id)
         return render_template('rodadas.html', rodadas = rodadas)
 
     @app.get('/partidas/<int:rodada_id>')
@@ -106,7 +118,7 @@ def init_app(app):
     @login_required
     def gerar_palpites(partida_id):
         print('Gerando palpites')
-        rep.gerar_palpites(partida_id)
+        rep.gerar_palpites(partida_id, session.get('GRUPO'))
         print('Palpites gerados')
         return redirect(url_for('palpites',partida_id=partida_id))
 
@@ -129,8 +141,8 @@ def init_app(app):
     @login_required
     def parciais(rodada_id):
         rodada = rep.traga_rodada(rodada_id)
-        parciais = rep.traga_parcial(rodada_id)
-        jogadores = rep.traga_jogadores()
+        parciais = rep.traga_parcial(rodada_id, session.get('GRUPO'))
+        jogadores = rep.traga_jogadores(session.get('GRUPO'))
         return render_template('parciais.html', rodada=rodada, parciais=parciais,jogadores=jogadores)
 
     @app.get('/palpites_jogador/<rodada_id>/<jogador_id>')
@@ -161,17 +173,19 @@ def init_app(app):
     @app.get('/nova_rodada')
     @login_required
     def nova_rodada():
-        rodadas = [int(r.nome) for r in rep.traga_rodadas()]
+        grupo = rep.traga_grupo(session.get('GRUPO'))
+        rodadas = [int(r.nome) for r in rep.traga_rodadas_por_torneio(grupo.torneio_id)]
         rodadas.sort()
         nova_rodada: int = 1
         if rodadas:
             nova_rodada = rodadas[-1] + 1
-        rep.salve_rodada(database.Rodada(nome=str(nova_rodada)))
-        return redirect(url_for('mostra_rodadas'))
+        rep.salve_rodada(database.Rodada(nome=str(nova_rodada), torneio_id=grupo.torneio_id))
+        return redirect(url_for('mostra_rodadas', grupo_id=grupo.id))
 
     @app.get('/times')
     @login_required
     def mostra_times():
-        times = rep.traga_times()
-        info = [ (time, rep.total_palpites_errados_por_time(time.id)) for time in times ]
+        grupo: database.Grupo = rep.traga_grupo(session.get('GRUPO'))
+        times = fachada.traga_times(grupo.torneio_id)
+        info = [ (time, rep.total_palpites_errados_por_time(time.id, grupo.torneio_id)) for time in times ]
         return render_template('times.html', info=info)

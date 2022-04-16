@@ -3,20 +3,37 @@ from typing import List
 from sqlalchemy import or_, and_
 
 from palpites.ext.database import Time, Jogador, Rodada, Partida, Palpite, db
-from palpites.ext.database import Usuario, Grupo
+from palpites.ext.database import Usuario, Grupo, Torneio
 from palpites.ext import utils
+
+def traga_torneios_por_responsavel(usuario_id):
+    return Torneio.query.filter(Torneio.responsavel_id == usuario_id).all()
+
+def traga_grupos_por_usuario(usuario_id):
+    jogadores = [j.id for j in traga_jogadores_por_usuario(usuario_id)]
+    return Grupo.query.join(Jogador).filter(
+        Jogador.id.in_(jogadores)
+    ).all()
+
+def traga_jogadores_por_usuario(usuario_id):
+    return Jogador.query.filter(Jogador.usuario_id == usuario_id).all()
 
 def traga_times():
     return Time.query.order_by(Time.nome).all()
 
-def traga_jogadores():
-    return Jogador.query.order_by(Jogador.pontos.desc()).all()
+def traga_jogadores(grupo_id):
+    return Jogador.query.filter(
+        Jogador.grupo_id == grupo_id
+    ).order_by(Jogador.pontos.desc()).all()
 
 def traga_jogador(id):
     return Jogador.query.get(id)
 
-def traga_rodadas():
-    return Rodada.query.order_by(Rodada.id.desc()).all()
+def traga_grupo(id):
+    return Grupo.query.get(id)
+
+def traga_rodadas_por_torneio(torneio_id):
+    return Rodada.query.filter(Rodada.torneio_id == torneio_id).order_by(Rodada.id.desc()).all()
 
 def traga_partidas_da_rodada(rodada_id):
     return Partida.query.filter(Partida.rodada_id == rodada_id).all()
@@ -72,9 +89,10 @@ def salve_palpite(palpite):
     db.session.add(palpite)
     db.session.commit()
 
-def gerar_palpites(partida_id):
+def gerar_palpites(partida_id, grupo_id):
     partida = traga_partida(partida_id)
     apostadores = Jogador.query.filter(
+        Jogador.grupo_id == grupo_id,
         Jogador.id.notin_(
             [p.apostador_id for p in partida.palpites]
         )
@@ -97,9 +115,9 @@ def consolidar_rodada(rodada_id):
         db.session.add(jogador)
     db.session.commit()
 
-def traga_parcial(rodada_id):
+def traga_parcial(rodada_id, grupo_id):
     players = {}
-    jogadores = traga_jogadores()
+    jogadores = traga_jogadores(grupo_id)
     for j in jogadores:
         players[j] = 0
     palpites = traga_palpites_da_rodada(rodada_id)
@@ -108,7 +126,8 @@ def traga_parcial(rodada_id):
             players[p.apostador] += 1
     return utils.ordenar_pela_pontuacao_da_rodada(players)
 
-def total_palpites_errados_por_time(time_id: int, jogador_id: int = None) -> int:
+def total_palpites_errados_por_time(time_id: int, torneio_id: int, jogador_id: int = None) -> int:
+    rodadas = [r.id for r in traga_rodadas_por_torneio(torneio_id)]
     if jogador_id is None:
         return Palpite.query.join(Partida).filter(
             or_(
@@ -122,7 +141,8 @@ def total_palpites_errados_por_time(time_id: int, jogador_id: int = None) -> int
                     Partida.resultado.in_(['M','E']),
                     Palpite.resultado == 'V'
                 )
-            )
+            ),
+            Partida.rodada_id.in_(rodadas)
         ).count()
     else:
         return Palpite.query.join(Partida).filter(
@@ -138,7 +158,8 @@ def total_palpites_errados_por_time(time_id: int, jogador_id: int = None) -> int
                     Palpite.resultado == 'V'
                 )
             ),
-            Palpite.apostador_id == jogador_id
+            Palpite.apostador_id == jogador_id,
+            Partida.rodada_id.in_(rodadas)
         ).count()
 
 def traga_usuario_por_apelido(apelido: str) -> Usuario:

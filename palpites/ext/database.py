@@ -66,11 +66,13 @@ class Jogador(db.Model):
 
     @property
     def imagem(self):
-        return f'token_{self.id}.png'
+        return f'token_{self.usuario_id}.png'
 
 class Rodada(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     nome = db.Column('nome', db.String(40))
+    torneio_id = db.Column(db.Integer, db.ForeignKey('torneio.id'))
+    torneio = db.relationship('Torneio', foreign_keys=[torneio_id])
 
 class Partida(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -118,9 +120,13 @@ class Grupo(db.Model):
     dono_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
     dono = db.relationship('Usuario', foreign_keys=[dono_id])
     torneio_id = db.Column(db.Integer, db.ForeignKey('torneio.id'))
-    torneio = db.relationship('Torneio', foreign_keys=[torneio_id])    
+    torneio = db.relationship('Torneio', foreign_keys=[torneio_id])
     data_cadastro = db.Column(db.DateTime, default=datetime.utcnow)
     ativo = db.Column(db.Boolean, default=True)
+
+class TimeTorneio(db.Model):
+    time_id = db.Column(db.Integer, primary_key = True)
+    torneio_id = db.Column(db.Integer, primary_key = True)
 
 
 def init_app(app):

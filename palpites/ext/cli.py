@@ -1,6 +1,7 @@
 import click
 
-from palpites.ext.database import db, Time, Jogador, Usuario
+from palpites.ext.database import db, Time, Jogador, Usuario, TimeTorneio
+from palpites.ext import fachada
 
 EVENT0S = {
     'serie_a_2022': [
@@ -63,11 +64,21 @@ def init_app(app):
 
     @app.cli.command('load-teams')
     @click.argument('event')
-    def carregar_times(event):
-        times = EVENT0S.get(event)
-        if times:
-            for time in times:
-                db.session.add(Time(nome=time[0], sigla=time[1]))
+    @click.argument('tournament')
+    def carregar_times(event, tournament):
+        tuplas = EVENT0S.get(event)
+        if tuplas:
+            for tupla in tuplas:
+                # procurar o time
+                time = fachada.traga_time_por_sigla(tupla[1])
+                if time:
+                    db.session.add(TimeTorneio(time_id=time.id, torneio_id=tournament))
+                else:
+                    # cadastrar novo time
+                    time = Time(nome=tupla[0], sigla=tupla[1])
+                    db.session.add(time)
+                    time = fachada.traga_time_por_sigla(tupla[1])
+                    db.session.add(TimeTorneio(time_id=time.id, torneio_id=tournament))
             db.session.commit()
         else:
             for descricao in DESCRICOES:
@@ -76,8 +87,13 @@ def init_app(app):
 
     @app.cli.command('new-player')
     @click.argument('name')
-    def novo_jogador(name):
-        jogador = Jogador(nome=name)
+    @click.argument('nick')
+    @click.argument('group')
+    def novo_jogador(name, nick, group):
+        usuario = fachada.traga_usuario_por_apelido(nick)
+        if not usuario:
+            print('Usuário não encontrado.')
+        jogador = Jogador(nome=name, usuario_id=usuario.id, grupo_id=group)
         db.session.add(jogador)
         db.session.commit()
         print(f'Jogador {name} criado com id {jogador.id}.')
@@ -88,6 +104,19 @@ def init_app(app):
     def listar_eventos():
         for descricao in DESCRICOES:
             print('{} - {}'.format(descricao[0], descricao[1]))
+
+    @app.cli.command('users')
+    def users():
+        usuarios = fachada.traga_usuarios()
+        for usuario in usuarios:
+            print('{} - {}'.format(usuario.id, usuario.apelido))
+
+    @app.cli.command('players')
+    @click.argument('group')
+    def players(group):
+        jogadores = fachada.traga_jogadores(group)
+        for jogador in jogadores:
+            print('{} - {}'.format(jogador.usuario.apelido, jogador.grupo.id))
 
     @app.cli.command('new-user')
     @click.argument('apelido')
