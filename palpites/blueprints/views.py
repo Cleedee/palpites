@@ -23,7 +23,7 @@ def init_app(app):
     @app.get('/jogadores')
     @login_required
     def jogadores():
-        lista = rep.traga_jogadores()
+        lista = rep.traga_jogadores(session.get('GRUPO'))
         return render_template('jogadores.html', jogadores=lista)
 
     @app.get('/rodadas/<int:grupo_id>')
@@ -134,7 +134,7 @@ def init_app(app):
     @app.get('/consolidar/<rodada_id>')
     @login_required
     def consolidar(rodada_id):
-        rep.consolidar_rodada(rodada_id)
+        rep.consolidar_rodada(rodada_id, session.get('GRUPO'))
         return redirect(url_for('jogadores'))
 
     @app.get('/parciais/<rodada_id>')

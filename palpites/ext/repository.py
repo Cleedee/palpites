@@ -101,9 +101,9 @@ def gerar_palpites(partida_id, grupo_id):
         db.session.add(Palpite(apostador_id=jogador.id,partida_id=partida_id,resultado='S'))
     db.session.commit()
 
-def consolidar_rodada(rodada_id):
+def consolidar_rodada(rodada_id, grupo_id):
     players = {}
-    jogadores = traga_jogadores()
+    jogadores = traga_jogadores(grupo_id)
     for j in jogadores:
         players[j.id] = j.pontos
     palpites = traga_palpites_da_rodada(rodada_id)
