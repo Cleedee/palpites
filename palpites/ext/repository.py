@@ -21,6 +21,9 @@ def traga_jogadores_por_usuario(usuario_id):
 def traga_times():
     return Time.query.order_by(Time.nome).all()
 
+def traga_time_por_nome(nome):
+    return Time.query.filter(Time.nome == nome).one_or_none()
+
 def traga_jogadores(grupo_id):
     return Jogador.query.filter(
         Jogador.grupo_id == grupo_id
@@ -168,3 +171,7 @@ def traga_usuario_por_apelido(apelido: str) -> Usuario:
 def salve_rodada(rodada: Rodada):
     db.session.add(rodada)
     db.session.commit()
+
+def traga_pontuacao_times(torneio_id: int, num_rodada: int):
+    # TODO
+    rodadas = [r.id for r in traga_rodadas_por_torneio(torneio_id) if int(r.nome) <= num_rodada]

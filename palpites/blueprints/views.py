@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-from flask import render_template, request, redirect, url_for, session
+from flask import render_template, request, redirect, url_for, session, current_app
 from flask import abort
 from flask_login import login_required, current_user
 
@@ -8,6 +8,7 @@ import palpites.ext.repository as rep
 from palpites.ext import fachada
 import palpites.ext.forms as forms
 from palpites.ext import database
+from palpites.ext.utils import api_pega_partidas_rodada
 
 def init_app(app):
 
@@ -51,6 +52,22 @@ def init_app(app):
         form.rodada_id.data = rodada_id
         form = forms.carregar_selecoes_partida(form, rep)
         return render_template('partida.html', form=form)
+
+    @app.get('/importar_partidas/<int:rodada_id>')
+    @login_required
+    def importar_partidas(rodada_id):
+        rodada = rep.traga_rodada(rodada_id)
+        lista_partidas = api_pega_partidas_rodada(current_app.config['API_FUTEBOL'], '10', rodada.nome)
+        for nome_mandante, nome_visitante in lista_partidas:
+            partida = database.Partida()
+            partida.rodada_id = rodada.id
+            mandante = rep.traga_time_por_nome(nome_mandante)
+            visitante = rep.traga_time_por_nome(nome_visitante)
+            partida.mandante_id = mandante.id
+            partida.visitante_id = visitante.id
+            rep.salve_partida(partida)
+        return redirect(url_for('mostra_partidas',rodada_id=rodada.id))
+        
 
     @app.get('/editar_partida/<int:partida_id>')
     @login_required

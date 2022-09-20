@@ -7,6 +7,9 @@
     {% if partidas|length < 10 %}
     <a href="{{ url_for('nova_partida', rodada_id=rodada.id) }}">Nova Partida</a>
     {% endif %}
+    {% if partidas|length == 0 %}
+	<a href="{{ url_for('importar_partidas', rodada_id=rodada.id) }}">Importar Partidas</a>
+    {% endif %}
     
     <table class="table table-striped">
         {% for partida in partidas %}
