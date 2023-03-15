@@ -1,9 +1,32 @@
 import click
 
 from palpites.ext.database import db, Time, Jogador, Usuario, TimeTorneio
+from palpites.ext.database import Grupo, Torneio
 from palpites.ext import fachada
 
 EVENT0S = {
+    'serie_a_2023': [
+        ('América-MG', 'america'), 
+        ('Athletico-PR','athletico'), 
+        ('Atlético-MG', 'atletico_mg'), 
+        ('Bahia', 'bahia'),
+        ('Botafogo', 'botafogo'),
+        ('Bragantino', 'bragantino'),
+        ('Corinthians', 'corinthians'),
+        ('Coritiba', 'coritiba'),
+        ('Cruzeiro', 'cruzeiro'),
+        ('Cuiabá', 'cuiaba'), 
+        ('Flamengo', 'flamengo'),
+        ('Fluminense', 'fluminense'),
+        ('Fortaleza', 'fortaleza'), 
+        ('Goiás', 'goias'), 
+        ('Grêmio', 'gremio'),
+        ('Internacional', 'inter'),
+        ('Palmeiras', 'palmeiras'), 
+        ('Santos', 'santos'),
+        ('São Paulo', 'spfc'),
+        ('Vasco', 'vasco')
+    ],    
     'serie_a_2022': [
         ('América-MG', 'america'), ('Athletico-PR',
                                     'athletico'), ('Atlético-GO', 'cag'),
@@ -52,6 +75,7 @@ EVENT0S = {
 DESCRICOES = [
     ('serie_a_2021', 'Clubes da Série A do Campeonato Brasileiro 2021'),
     ('serie_a_2022', 'Clubes da Série A do Campeonato Brasileiro 2022'),
+    ('serie_a_2023', 'Clubes da Série A do Campeonato Brasileiro 2023'),
     ('premier2021', 'Clubes da Premier League 2021-2022')
 ]
 
@@ -111,6 +135,18 @@ def init_app(app):
         for usuario in usuarios:
             print('{} - {}'.format(usuario.id, usuario.apelido))
 
+    @app.cli.command('groups')
+    def groups():
+        grupos = fachada.traga_grupos()
+        for grupo in grupos:
+            print('{} - {}'.format(grupo.id, grupo.nome))
+
+    @app.cli.command('tournaments')
+    def tournaments():
+        torneios = fachada.traga_torneios()
+        for torneio in torneios:
+            print('{} - {}'.format(torneio.id, torneio.nome))
+
     @app.cli.command('players')
     @click.argument('group')
     def players(group):
@@ -127,3 +163,22 @@ def init_app(app):
         db.session.add(usuario)
         db.session.commit()
         print('Usuario criado.')
+
+    @app.cli.command('new-group')
+    @click.argument('name')
+    @click.argument('owner')
+    @click.argument('tournament')
+    def novo_grupo(name, owner, tournament):
+        grupo = Grupo(nome=name, dono_id=int(owner), torneio_id=int(tournament))
+        db.session.add(grupo)
+        db.session.commit()
+        print('Grupo Criado.')
+
+    @app.cli.command('new-tournament')
+    @click.argument('name')
+    @click.argument('owner')
+    def novo_torneio(name, owner):
+        torneio = Torneio(nome=name, responsavel_id=owner)
+        db.session.add(torneio)
+        db.session.commit()
+        print('Torneio Criado.')

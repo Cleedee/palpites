@@ -1,6 +1,7 @@
 from sqlalchemy import select
 
 from palpites.ext.database import Time, Usuario, Jogador, TimeTorneio, db
+from palpites.ext.database import Grupo, Torneio
 
 def traga_time_por_sigla(sigla):
     return Time.query.filter(Time.sigla == sigla).one_or_none()
@@ -27,3 +28,9 @@ def traga_jogador_por_usuario(usuario_id, grupo_id):
         Jogador.usuario_id == usuario_id,
         Jogador.grupo_id == grupo_id
     ).one_or_none()
+
+def traga_grupos():
+    return Grupo.query.all()
+
+def traga_torneios():
+    return Torneio.query.all()
