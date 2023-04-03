@@ -122,6 +122,7 @@ class Grupo(db.Model):
     torneio_id = db.Column(db.Integer, db.ForeignKey('torneio.id'))
     torneio = db.relationship('Torneio', foreign_keys=[torneio_id])
     data_cadastro = db.Column(db.DateTime, default=datetime.utcnow)
+    rodada_atual_id = db.Column(db.Integer)
     ativo = db.Column(db.Boolean, default=True)
 
 class TimeTorneio(db.Model):
