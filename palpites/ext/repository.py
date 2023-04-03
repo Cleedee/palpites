@@ -12,7 +12,7 @@ def traga_torneios_por_responsavel(usuario_id):
 def traga_grupos_por_usuario(usuario_id):
     jogadores = [j.id for j in traga_jogadores_por_usuario(usuario_id)]
     return Grupo.query.join(Jogador).filter(
-        Jogador.id.in_(jogadores)
+        Jogador.id.in_(jogadores)#, Grupo.ativo == True
     ).all()
 
 def traga_jogadores_por_usuario(usuario_id):
@@ -78,7 +78,7 @@ def traga_palpites_da_rodada(rodada_id) -> List[Palpite]:
     return Palpite.query.join(Partida).filter(Partida.rodada_id == rodada_id).all()
 
 def traga_grupos_por_dono(dono_id):
-    return Grupo.query.filter(Grupo.dono_id == dono_id).all()
+    return Grupo.query.filter(Grupo.dono_id == dono_id, Grupo.ativo == True).all()
 
 def salve_grupo(grupo):
     db.session.add(grupo)
