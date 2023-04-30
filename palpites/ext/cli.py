@@ -152,7 +152,7 @@ def init_app(app):
     def players(group):
         jogadores = fachada.traga_jogadores(group)
         for jogador in jogadores:
-            print('{} - {}'.format(jogador.usuario.apelido, jogador.grupo.id))
+            print('{} - {}'.format(jogador.id, jogador.usuario.apelido))
 
     @app.cli.command('new-user')
     @click.argument('apelido')
