@@ -1,7 +1,7 @@
 [default]
 SESSION_TYPE = 'filesystem'
 SECRET_KEY = "@jinja {{env['SECRET_KEY'] or 'segredo'}}"
-SQLALCHEMY_DATABASE_URI = "sqlite:///banco.db"
+SQLALCHEMY_DATABASE_URI = "@jinja {{env['DATABASE_URI']}}"
 SQLALCHEMY_TRACK_MODIFICATIONS = 'False'
 APP_NAME = "@jinja {{env['APP_NAME'] or 'Palpites'}}"
 RBAC_USE_WHITE = 'True'
