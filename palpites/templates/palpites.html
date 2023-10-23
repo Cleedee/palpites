@@ -13,7 +13,7 @@
               <td class="{{'resultado' if partida.resultado == 'M' else ''}}">
                   <img src="{{ url_for('static', filename=partida.mandante.imagem  ) }}" alt="">
               </td>
-              <td class="{{'resultado' if partida.resultado == 'E' else ''}}"> X </td>
+              <td class="{{'resultado' if partida.resultado == 'E' else ''}}"> versus </td>
               <td class="{{'resultado' if partida.resultado == 'V' else ''}}">
                   <img src="{{ url_for('static', filename=partida.visitante.imagem  ) }}" alt="">
               </td>
